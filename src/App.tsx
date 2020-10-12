@@ -1,24 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+import React from 'react';
+
+import useNetlify from './useNetlify'
+
+const API_KEY = process.env.REACT_APP_NETLIFY_ACCESS_TOKEN
+
 function App() {
+  const { user, sites, status } = useNetlify(API_KEY)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+
+      {status === 'error' && (
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          Oups, il y a eu un problème...
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      )}
+
+      {status === 'idle' && (
+        <div className="App-loader" />
+      )}
+
+      {status === 'success' && (
+        <>
+          <h1>
+            {`Bonjour ${user?.full_name || 'unknown'} 👋`}
+          </h1>
+          <p>
+            {`Tu as ${user?.site_count || 0} sites sur Netlify.com`}
+          </p>
+          <ul className="App-list">
+            {sites ? sites.map(site => (
+              <li key={site.id}>
+                <a 
+                  href={site.url}
+                  className="App-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {`${site.name}`}
+                </a>
+              </li>
+            )) : (
+              <p>
+                Aucun résultat
+              </p>
+            )}
+          </ul>
+        </>
+      )}
     </div>
   );
 }

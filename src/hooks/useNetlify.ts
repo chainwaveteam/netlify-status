@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import NetlifyAPI from 'netlify'
 
-import { NetlifySite, NetlifyUser } from './interfaces'
+import { NetlifySite, NetlifyUser } from '../types/interfaces'
 
 export interface NetlifyBaseData {
     user?: NetlifyUser

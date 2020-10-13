@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { NetlifySite } from './interfaces'
+import { NetlifySite } from '../types/interfaces'
 
 import './Card.css'
 

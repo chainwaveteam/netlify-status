@@ -1,10 +1,10 @@
-import './App.css';
+import React from 'react'
 
-import React from 'react';
-
-import useNetlify, { NetlifyDataSuccess } from './useNetlify'
-import { NetlifyUser } from './interfaces'
+import useNetlify, { NetlifyDataSuccess } from '../hooks/useNetlify'
+import { NetlifyUser } from '../types/interfaces'
 import Grid from './Grid'
+
+import './App.css'
 
 const API_KEY = process.env.REACT_APP_NETLIFY_ACCESS_TOKEN
 

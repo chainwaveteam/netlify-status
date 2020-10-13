@@ -4,7 +4,7 @@ import React from 'react';
 
 import useNetlify, { NetlifyDataSuccess } from './useNetlify'
 import { NetlifyUser } from './interfaces'
-import Card from './Card'
+import Grid from './Grid'
 
 const API_KEY = process.env.REACT_APP_NETLIFY_ACCESS_TOKEN
 
@@ -35,10 +35,7 @@ const AppContent = () => {
       return (
         <>
           <AppHeader {...user} />
-
-          <div className="App-grid">
-            {sites.map(site => <Card key={site.id} {...site} />)}
-          </div>
+          <Grid sites={sites} />
         </>
       )
   

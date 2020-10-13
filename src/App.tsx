@@ -2,56 +2,55 @@ import './App.css';
 
 import React from 'react';
 
-import useNetlify from './useNetlify'
+import useNetlify, { NetlifyDataSuccess } from './useNetlify'
+import { NetlifyUser } from './interfaces'
+import Card from './Card'
 
 const API_KEY = process.env.REACT_APP_NETLIFY_ACCESS_TOKEN
 
-function App() {
-  const { user, sites, status } = useNetlify(API_KEY)
+const AppHeader = ({ full_name, site_count, slug }: NetlifyUser) => (
+  <header className="App-header">
+    <h1>
+      {`Bonjour ${full_name} 👋`}
+    </h1>
+    <p>
+      {`Tu as `}
+      <strong>{site_count}</strong>
+      {` sites sur `}
+      <a href={`https://app.netlify.com/teams/${slug}/sites`}>
+        Netlify.com
+      </a>
+    </p>
+  </header>
+)
 
-  return (
-    <div className="App">
+const AppContent = () => {
+  const { status, ...data } = useNetlify(API_KEY)
+  switch (status) {
+    case "idle":
+      return <div className="App-loader" />
 
-      {status === 'error' && (
-        <p>
-          Oups, il y a eu un problème...
-        </p>
-      )}
-
-      {status === 'idle' && (
-        <div className="App-loader" />
-      )}
-
-      {status === 'success' && (
+    case "success":
+      const { sites, user } = data as NetlifyDataSuccess
+      return (
         <>
-          <h1>
-            {`Bonjour ${user?.full_name || 'unknown'} 👋`}
-          </h1>
-          <p>
-            {`Tu as ${user?.site_count || 0} sites sur Netlify.com`}
-          </p>
-          <ul className="App-list">
-            {sites ? sites.map(site => (
-              <li key={site.id}>
-                <a 
-                  href={site.url}
-                  className="App-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {`${site.name}`}
-                </a>
-              </li>
-            )) : (
-              <p>
-                Aucun résultat
-              </p>
-            )}
-          </ul>
+          <AppHeader {...user} />
+
+          <div className="App-grid">
+            {sites.map(site => <Card key={site.id} {...site} />)}
+          </div>
         </>
-      )}
-    </div>
-  );
+      )
+  
+    default:
+      return <p>Oups, il y a eu un problème...</p>
+  }
 }
 
-export default App;
+const App = () => (
+  <div className="App">
+    <AppContent />
+  </div>
+) 
+
+export default App
